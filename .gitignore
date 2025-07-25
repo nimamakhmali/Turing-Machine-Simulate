@@ -1,0 +1,13 @@
+# Binaries
+*.exe
+*.out
+*.o
+
+# OS Files
+.DS_Store
+
+# Output
+output/*
+
+# Vendor
+vendor/
