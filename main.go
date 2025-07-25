@@ -2,14 +2,20 @@ package main
 
 import (
 	"encoding/json"
+<<<<<<< HEAD
 	"flag"
 	"fmt"
 	"os"
 
+=======
+	"fmt"
+	"os"
+>>>>>>> dd8b44d (first try)
 	"github.com/nimamakhmali/turing-machine-go/turing"
 )
 
 func main() {
+<<<<<<< HEAD
 	// Parse command line arguments
 	inputFile := flag.String("input", "input/example_tm.json", "Input JSON file for Turing machine")
 	flag.Parse()
@@ -47,4 +53,23 @@ func main() {
 	fmt.Printf("Result: %s\n", result)
 	fmt.Printf("Final tape: %v\n", tape)
 	fmt.Printf("Steps taken: %d\n", steps)
+=======
+	file, err := os.Open("input/example_tm.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	var def turing.TuringMachineDefinition
+	if err := json.NewDecoder(file).Decode(&def); err != nil {
+		panic(err)
+	}
+
+	tm := turing.NewTuringMachine(def)
+	result, tape, steps := tm.Run(1000)
+
+	fmt.Println("Result:", result)
+	fmt.Println("Final Tape:", tape)
+	fmt.Println("Steps:", steps)
+>>>>>>> dd8b44d (first try)
 }

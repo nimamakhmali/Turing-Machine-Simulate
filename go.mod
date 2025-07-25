@@ -1,5 +1,6 @@
 module github.com/nimamakhmali/turing-machine-go
 
+<<<<<<< HEAD
 go 1.24.3
 
 require (
@@ -35,3 +36,7 @@ require (
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+=======
+
+go 1.24.3
+>>>>>>> dd8b44d (first try)
