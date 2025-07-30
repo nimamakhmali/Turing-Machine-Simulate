@@ -1,20 +1,20 @@
 package turing
 
-//import "strings"
+import "strings"
 
 type TuringMachine struct {
 	Definition TuringMachineDefinition
-	Tape      []string
-	Head      int
-	State     string
+	Tape       []string
+	Head       int
+	State      string
 }
 
 func NewTuringMachine(def TuringMachineDefinition) *TuringMachine {
 	return &TuringMachine{
 		Definition: def,
-		Tape:      make([]string, 0),
-		Head:      0,
-		State:     "initial",
+		Tape:       strings.Split(def.Tape, ""),
+		Head:       def.HeadPosition,
+		State:      def.StartState,
 	}
 }
 
@@ -27,8 +27,7 @@ func (tm *TuringMachine) Step() bool {
 		tm.Tape = append(tm.Tape, "_")
 	}
 
-	currentSymbol := tm.Tape[tm.Head]
-	key := tm.State + "," + currentSymbol
+	key := tm.State + "," + tm.Tape[tm.Head]
 
 	transition, ok := tm.Definition.Transitions[key]
 	if !ok {
@@ -50,7 +49,6 @@ func (tm *TuringMachine) Step() bool {
 
 	return true
 }
-
 
 func (tm *TuringMachine) Run(maxSteps int) (string, []string, int) {
 	steps := 0
