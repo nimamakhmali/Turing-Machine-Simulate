@@ -1,0 +1,26 @@
+{
+  "states": ["q0", "q1", "q2", "q_accept", "q_reject"],
+  "input_alphabet": ["0", "1"],
+  "tape_alphabet": ["0", "1", "X", "_"],
+  "start_state": "q0",
+  "accept_state": "q_accept",
+  "reject_state": "q_reject",
+  "transitions": {
+    "q0,0": {"new_state": "q1", "write": "X", "direction": "R"},
+    "q0,1": {"new_state": "q2", "write": "X", "direction": "R"},
+    "q0,X": {"new_state": "q0", "write": "X", "direction": "R"},
+    "q0,_": {"new_state": "q_accept", "write": "_", "direction": "N"},
+    
+    "q1,0": {"new_state": "q1", "write": "0", "direction": "R"},
+    "q1,1": {"new_state": "q1", "write": "1", "direction": "R"},
+    "q1,X": {"new_state": "q1", "write": "X", "direction": "R"},
+    "q1,_": {"new_state": "q_accept", "write": "_", "direction": "N"},
+    
+    "q2,0": {"new_state": "q2", "write": "0", "direction": "R"},
+    "q2,1": {"new_state": "q2", "write": "1", "direction": "R"},
+    "q2,X": {"new_state": "q2", "write": "X", "direction": "R"},
+    "q2,_": {"new_state": "q_accept", "write": "_", "direction": "N"}
+  },
+  "tape": "1001",
+  "head_position": 0
+} 
