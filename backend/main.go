@@ -3,6 +3,7 @@ package main
 import (
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,8 @@ func main() {
 	"github.com/gin-gonic/gin"
 =======
 >>>>>>> 033d287 (feat: add structs and improve code organization)
+=======
+>>>>>>> 3bfb323552cbb36413a2a7258edcff776262d231
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -47,6 +50,9 @@ func main() {
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 29a7883 (feat: add packages)
 =======
 >>>>>>> 033d287 (feat: add structs and improve code organization)
+=======
+>>>>>>> 3bfb323552cbb36413a2a7258edcff776262d231
