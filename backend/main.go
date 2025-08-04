@@ -1,39 +1,36 @@
 package main
 
 import (
-	"fmt"
-	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/nimamakhmali/turing-machine-go/turing"
 )
 
 type SimulateRequest struct {
 	Definition turing.TuringMachineDefinition `json:"definition"`
-	MaxSteps   int                           `json:"maxSteps"`
+	MaxSteps   int                            `json:"maxSteps"`
 }
 
 type SimulateResponse struct {
-	Result     string   `json:"result"`
-	FinalTape  []string `json:"finalTape"`
-	Steps      int      `json:"steps"`
-	History    []Step   `json:"history,omitempty"`
+	Result    string   `json:"result"`
+	FinalTape []string `json:"finalTape"`
+	Steps     int      `json:"steps"`
+	History   []Step   `json:"history,omitempty"`
 }
 
 type Step struct {
-	State     string   `json:"state"`
-	Tape      []string `json:"tape"`
-	Head      int      `json:"head"`
-	Step      int      `json:"step"`
-	Action    string   `json:"action"`
+	State  string   `json:"state"`
+	Tape   []string `json:"tape"`
+	Head   int      `json:"head"`
+	Step   int      `json:"step"`
+	Action string   `json:"action"`
 }
 
 func main() {
-	r := gin.Default()    //router
+	r := gin.Default() //router
 	r.Use(cors.Default())
 	api := r.Group("/api")
 	{
@@ -55,15 +52,16 @@ func simulateTuringMachine(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
-	} else {
+	}
+
 	tm := turing.NewTuringMachine(req.Definition)
 	history := make([]Step, 0)
 	steps := 0
-	
+
 	history = append(history, Step{
 		State:  tm.State,
 		Tape:   append([]string{}, tm.Tape...),
-		Head:    tm.Head,
+		Head:   tm.Head,
 		Step:   0,
 		Action: "Initial state",
 	})
@@ -71,10 +69,9 @@ func simulateTuringMachine(c *gin.Context) {
 	for tm.State != tm.Definition.AcceptState &&
 		tm.State != tm.Definition.RejectState &&
 		steps < req.MaxSteps {
-		
-		beforeState := tm.State
-		beforeHead := tm.Head
 
+		beforeState := tm.State
+		//beforeHead := tm.Head
 		tm.Step()
 		steps++
 
@@ -82,13 +79,13 @@ func simulateTuringMachine(c *gin.Context) {
 		if tm.State == beforeState {
 			action = "Stayed in " + tm.State
 		}
-		
+
 		history = append(history, Step{
 			State:  tm.State,
 			Tape:   append([]string{}, tm.Tape...),
-			Head:    tm.Head,
-			Step:    steps,
-			Action:  action,
+			Head:   tm.Head,
+			Step:   steps,
+			Action: action,
 		})
 	}
 
@@ -97,7 +94,7 @@ func simulateTuringMachine(c *gin.Context) {
 		result = "Accepted"
 	}
 
-	response := SimulationResponse{
+	response := SimulateResponse{
 		Result:    result,
 		FinalTape: tm.Tape,
 		Steps:     steps,
@@ -106,7 +103,6 @@ func simulateTuringMachine(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
-
 
 func getExamples(c *gin.Context) {
 	examples := []gin.H{
@@ -119,8 +115,8 @@ func getExamples(c *gin.Context) {
 
 func getExample(c *gin.Context) {
 	name := c.Param("name")
-	
+
 	// Load example from file
 	// This would load from examples/ directory
 	c.JSON(http.StatusOK, gin.H{"message": "Example " + name + " loaded"})
-} 
+}
