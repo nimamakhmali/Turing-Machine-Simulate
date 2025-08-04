@@ -50,7 +50,63 @@ func main() {
 	r.Run(":8080")
 }
 
-func simulateTuringMachine(c *gin.Context) {}
+func simulateTuringMachine(c *gin.Context) {
+	var req SimulateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else {
+	tm := turing.NewTuringMachine(req.Definition)
+	history := make([]Step, 0)
+	steps := 0
+	
+	history = append(history, Step{
+		State:  tm.State,
+		Tape:   append([]string{}, tm.Tape...),
+		Head:    tm.Head,
+		Step:   0,
+		Action: "Initial state",
+	})
+
+	for tm.State != tm.Definition.AcceptState &&
+		tm.State != tm.Definition.RejectState &&
+		steps < req.MaxSteps {
+		
+		beforeState := tm.State
+		beforeHead := tm.Head
+
+		tm.Step()
+		steps++
+
+		action := "Moved to " + tm.State
+		if tm.State == beforeState {
+			action = "Stayed in " + tm.State
+		}
+		
+		history = append(history, Step{
+			State:  tm.State,
+			Tape:   append([]string{}, tm.Tape...),
+			Head:    tm.Head,
+			Step:    steps,
+			Action:  action,
+		})
+	}
+
+	result := "Rejected"
+	if tm.State == tm.Definition.AcceptState {
+		result = "Accepted"
+	}
+
+	response := SimulationResponse{
+		Result:    result,
+		FinalTape: tm.Tape,
+		Steps:     steps,
+		History:   history,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
 
 func getExamples(c *gin.Context) {
 	examples := []gin.H{
