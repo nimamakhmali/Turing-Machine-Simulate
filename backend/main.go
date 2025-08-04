@@ -12,12 +12,12 @@ import (
 	"github.com/nimamakhmali/turing-machine-go/turing"
 )
 
-type SimulationRequest struct {
+type SimulateRequest struct {
 	Definition turing.TuringMachineDefinition `json:"definition"`
 	MaxSteps   int                           `json:"maxSteps"`
 }
 
-type SimulationResponse struct {
+type SimulateResponse struct {
 	Result     string   `json:"result"`
 	FinalTape  []string `json:"finalTape"`
 	Steps      int      `json:"steps"`
@@ -52,6 +52,19 @@ func main() {
 
 func simulateTuringMachine(c *gin.Context) {}
 
-func getExamples(c *gin.Context) {}
+func getExamples(c *gin.Context) {
+	examples := []gin.H{
+		{"name": "simple", "title": "Simple Example", "description": "Basic TM that accepts strings with 0"},
+		{"name": "palindrome", "title": "Palindrome Check", "description": "TM that checks for palindromes"},
+		{"name": "binary", "title": "Binary Counter", "description": "TM that increments binary numbers"},
+	}
+	c.JSON(http.StatusOK, examples)
+}
 
-func getExample(c *gin.Context) {} 
+func getExample(c *gin.Context) {
+	name := c.Param("name")
+	
+	// Load example from file
+	// This would load from examples/ directory
+	c.JSON(http.StatusOK, gin.H{"message": "Example " + name + " loaded"})
+} 
