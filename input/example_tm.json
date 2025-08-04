@@ -2,7 +2,15 @@
   "states": ["q0", "q1", "q_accept", "q_reject"],
   "input_alphabet": ["0", "1"],
   "tape_alphabet": ["0", "1", "X", "_"],
+<<<<<<< HEAD
+<<<<<<< HEAD
   "start_state": "q0",         
+=======
+  "start_state": "q0",
+>>>>>>> dd8b44d (first try)
+=======
+  "start_state": "q0",         
+>>>>>>> 96d6fc2 (update all)
   "accept_state": "q_accept",
   "reject_state": "q_reject",
   "transitions": {
@@ -11,6 +19,14 @@
     "q1,1": { "new_state": "q1", "write": "1", "direction": "R" },
     "q1,_": { "new_state": "q_accept", "write": "_", "direction": "N" }
   },
+<<<<<<< HEAD
+<<<<<<< HEAD
   "tape": "0011",             
+=======
+  "tape": "0011",
+>>>>>>> dd8b44d (first try)
+=======
+  "tape": "0011",             
+>>>>>>> 96d6fc2 (update all)
   "head_position": 0
 }
