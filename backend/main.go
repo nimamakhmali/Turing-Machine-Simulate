@@ -40,8 +40,8 @@ func main() {
 		api.GET("/examples", getExamples)
 		api.GET("/examples/:name", getExample)
 	}
-	r.Static("/static", "./frontend/static")
-	r.LoadHTMLGlob("frontend/templates/*")
+	r.Static("/static", "../frontend/static")
+	r.LoadHTMLGlob("../frontend/templates/*")
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
@@ -117,22 +117,22 @@ func getExamples(c *gin.Context) {
 
 func getExample(c *gin.Context) {
 	name := c.Param("name")
-	
+
 	// Load example from JSON file
 	examplePath := "../input/" + name + "_tm.json"
-	
+
 	// Read and parse the JSON file
 	fileData, err := ioutil.ReadFile(examplePath)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Example not found: " + err.Error()})
 		return
 	}
-	
+
 	var example turing.TuringMachineDefinition
 	if err := json.Unmarshal(fileData, &example); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid JSON format: " + err.Error()})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, example)
 }
