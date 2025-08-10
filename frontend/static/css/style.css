@@ -117,3 +117,24 @@ header p {
     background: #edf2f7;
     border-color: #cbd5e0;
 }
+
+/* JSON Editor Styles */
+#json_editor {
+    width: 100%;
+    min-height: 200px;
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #f8fafc;
+    resize: vertical;
+}
+
+#json_editor:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
