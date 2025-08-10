@@ -181,3 +181,41 @@ header p {
     margin-bottom: 10px;
     color: #4a5568;
 }
+
+/* Tape Display Styles */
+.tape-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 15px 0;
+    justify-content: center;
+}
+
+.tape-cell {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    background: white;
+    color: #4a5568;
+    transition: all 0.3s ease;
+}
+
+.tape-cell:hover {
+    transform: scale(1.1);
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.error {
+    color: #e53e3e;
+    font-weight: 600;
+    text-align: center;
+    padding: 20px;
+}
