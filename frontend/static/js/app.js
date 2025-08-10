@@ -197,7 +197,142 @@ function loadJsonConfiguration() {
     }
 }
 
+function runSimulation() {
+    try {
+        // Get configuration from JSON editor
+        const jsonText = jsonEditor.value;
+        const config = JSON.parse(jsonText);
+        
+        // Update tape with user input
+        config.tape = tapeInput.value;
+        config.head_position = 0;
+        
+        // Get max steps
+        const maxSteps = parseInt(maxStepsInput.value);
+        
+        // Prepare request
+        const request = {
+            definition: config,
+            maxSteps: maxSteps
+        };
+        
+        // Send to backend
+        updateStatus("Running...");
+        fetch('/api/simulate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        })
+        .then(response => response.json())
+        .then(data => {
+            currSimulate = data;
+            currSteps = data.steps;
+            simulateHistory = data.history || [];
+            
+            updateStatus(data.result);
+            stepsElement.textContent = data.steps;
+            displayTape(data.finalTape);
+            displayHistory();
+        })
+        .catch(error => {
+            updateStatus("Error: " + error.message);
+        });
+        
+    } catch (error) {
+        updateStatus("Error: " + error.message);
+    }
+}
 
+function displayTape(tape) {
+    if (!tape || !Array.isArray(tape)) {
+        tapeDisplay.innerHTML = '<span class="error">Invalid tape data</span>';
+        return;
+    }
+    
+    let html = '<div class="tape-container">';
+    tape.forEach((symbol, index) => {
+        html += `<span class="tape-cell">${symbol}</span>`;
+    });
+    html += '</div>';
+    
+    tapeDisplay.innerHTML = html;
+}
 
+function displayHistory() {
+    if (!simulateHistory || simulateHistory.length === 0) {
+        historyList.innerHTML = '<div class="no-history">No execution history available</div>';
+        return;
+    }
+    
+    let html = '';
+    simulateHistory.forEach((step, index) => {
+        html += `<div class="history-step">
+            <span class="step-number">Step ${step.step}</span>
+            <span class="step-state">State: ${step.state}</span>
+            <span class="step-head">Head: ${step.head}</span>
+            <span class="step-action">${step.action}</span>
+        </div>`;
+    });
+    
+    historyList.innerHTML = html;
+}
 
-
+function stepThroughSimulation() {
+    if (isRun) {
+        updateStatus("Simulation already running");
+        return;
+    }
+    
+    try {
+        // Get configuration from JSON editor
+        const jsonText = jsonEditor.value;
+        const config = JSON.parse(jsonText);
+        
+        // Update tape with user input
+        config.tape = tapeInput.value;
+        config.head_position = 0;
+        
+        // Get max steps
+        const maxSteps = parseInt(maxStepsInput.value);
+        
+        // Prepare request
+        const request = {
+            definition: config,
+            maxSteps: maxSteps
+        };
+        
+        // Send to backend for step-by-step simulation
+        updateStatus("Starting step-by-step simulation...");
+        isRun = true;
+        
+        fetch('/api/simulate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        })
+        .then(response => response.json())
+        .then(data => {
+            currSimulate = data;
+            currSteps = data.steps;
+            simulateHistory = data.history || [];
+            
+            updateStatus("Step-by-step simulation completed");
+            stepsElement.textContent = data.steps;
+            displayTape(data.finalTape);
+            displayHistory();
+            isRun = false;
+        })
+        .catch(error => {
+            updateStatus("Error: " + error.message);
+            isRun = false;
+        });
+        
+    } catch (error) {
+        updateStatus("Error: " + error.message);
+        isRun = false;
+    }
+}
