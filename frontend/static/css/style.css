@@ -219,3 +219,104 @@ header p {
     text-align: center;
     padding: 20px;
 }
+
+/* History Display Styles */
+.history-step {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 15px;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.history-step:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #667eea;
+}
+
+.step-number {
+    background: #667eea;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 60px;
+    text-align: center;
+}
+
+.step-state {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.step-head {
+    color: #718096;
+    font-size: 14px;
+}
+
+.step-action {
+    color: #38a169;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.no-history {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .config-panel, .simulation-panel {
+        padding: 20px;
+    }
+    
+    .history-step {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .step-number {
+        justify-self: center;
+    }
+    
+    .tape-cell {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        margin-right: 0;
+    }
+} 
