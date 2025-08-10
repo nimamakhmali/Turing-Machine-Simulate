@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -115,8 +117,22 @@ func getExamples(c *gin.Context) {
 
 func getExample(c *gin.Context) {
 	name := c.Param("name")
-
-	// Load example from file
-	// This would load from examples/ directory
-	c.JSON(http.StatusOK, gin.H{"message": "Example " + name + " loaded"})
+	
+	// Load example from JSON file
+	examplePath := "../input/" + name + "_tm.json"
+	
+	// Read and parse the JSON file
+	fileData, err := ioutil.ReadFile(examplePath)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Example not found: " + err.Error()})
+		return
+	}
+	
+	var example turing.TuringMachineDefinition
+	if err := json.Unmarshal(fileData, &example); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid JSON format: " + err.Error()})
+		return
+	}
+	
+	c.JSON(http.StatusOK, example)
 }
