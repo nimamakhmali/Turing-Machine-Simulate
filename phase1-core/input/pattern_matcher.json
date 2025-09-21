@@ -1,0 +1,53 @@
+{
+  "states": ["q0", "q1", "q2", "q3", "q4", "q5", "q_accept", "q_reject"],
+  "input_alphabet": ["0", "1"],
+  "tape_alphabet": ["0", "1", "X", "Y", "Z", "_"],
+  "start_state": "q0",
+  "accept_state": "q_accept",
+  "reject_state": "q_reject",
+  "transitions": {
+    "q0,0": {"new_state": "q1", "write": "X", "direction": "R"},
+    "q0,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q0,X": {"new_state": "q0", "write": "X", "direction": "R"},
+    "q0,Y": {"new_state": "q0", "write": "Y", "direction": "R"},
+    "q0,Z": {"new_state": "q0", "write": "Z", "direction": "R"},
+    "q0,_": {"new_state": "q_reject", "write": "_", "direction": "N"},
+    
+    "q1,0": {"new_state": "q2", "write": "Y", "direction": "R"},
+    "q1,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q1,X": {"new_state": "q1", "write": "X", "direction": "R"},
+    "q1,Y": {"new_state": "q1", "write": "Y", "direction": "R"},
+    "q1,Z": {"new_state": "q1", "write": "Z", "direction": "R"},
+    "q1,_": {"new_state": "q_reject", "write": "_", "direction": "N"},
+    
+    "q2,0": {"new_state": "q3", "write": "Z", "direction": "R"},
+    "q2,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q2,X": {"new_state": "q2", "write": "X", "direction": "R"},
+    "q2,Y": {"new_state": "q2", "write": "Y", "direction": "R"},
+    "q2,Z": {"new_state": "q2", "write": "Z", "direction": "R"},
+    "q2,_": {"new_state": "q_reject", "write": "_", "direction": "N"},
+    
+    "q3,0": {"new_state": "q4", "write": "0", "direction": "R"},
+    "q3,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q3,X": {"new_state": "q3", "write": "X", "direction": "R"},
+    "q3,Y": {"new_state": "q3", "write": "Y", "direction": "R"},
+    "q3,Z": {"new_state": "q3", "write": "Z", "direction": "R"},
+    "q3,_": {"new_state": "q_reject", "write": "_", "direction": "N"},
+    
+    "q4,0": {"new_state": "q5", "write": "0", "direction": "R"},
+    "q4,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q4,X": {"new_state": "q4", "write": "X", "direction": "R"},
+    "q4,Y": {"new_state": "q4", "write": "Y", "direction": "R"},
+    "q4,Z": {"new_state": "q4", "write": "Z", "direction": "R"},
+    "q4,_": {"new_state": "q_reject", "write": "_", "direction": "N"},
+    
+    "q5,0": {"new_state": "q_accept", "write": "0", "direction": "N"},
+    "q5,1": {"new_state": "q0", "write": "1", "direction": "R"},
+    "q5,X": {"new_state": "q5", "write": "X", "direction": "R"},
+    "q5,Y": {"new_state": "q5", "write": "Y", "direction": "R"},
+    "q5,Z": {"new_state": "q5", "write": "Z", "direction": "R"},
+    "q5,_": {"new_state": "q_reject", "write": "_", "direction": "N"}
+  },
+  "tape": "000000",
+  "head_position": 0
+}

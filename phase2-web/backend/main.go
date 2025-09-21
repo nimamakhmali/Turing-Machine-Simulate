@@ -1,0 +1,138 @@
+package main
+
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/nimamakhmali/turing-machine-go/turing"
+)
+
+type SimulateRequest struct {
+	Definition turing.TuringMachineDefinition `json:"definition"`
+	MaxSteps   int                            `json:"maxSteps"`
+}
+
+type SimulateResponse struct {
+	Result    string   `json:"result"`
+	FinalTape []string `json:"finalTape"`
+	Steps     int      `json:"steps"`
+	History   []Step   `json:"history,omitempty"`
+}
+
+type Step struct {
+	State  string   `json:"state"`
+	Tape   []string `json:"tape"`
+	Head   int      `json:"head"`
+	Step   int      `json:"step"`
+	Action string   `json:"action"`
+}
+
+func main() {
+	r := gin.Default() //router
+	r.Use(cors.Default())
+	api := r.Group("/api")
+	{
+		api.POST("/simulate", simulateTuringMachine)
+		api.GET("/examples", getExamples)
+		api.GET("/examples/:name", getExample)
+	}
+	r.Static("/static", "../frontend/static")
+	r.LoadHTMLGlob("../frontend/templates/*")
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+	log.Println("Server starting on :8081")
+	r.Run(":8081")
+}
+
+func simulateTuringMachine(c *gin.Context) {
+	var req SimulateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	tm := turing.NewTuringMachine(req.Definition)
+	history := make([]Step, 0)
+	steps := 0
+
+	history = append(history, Step{
+		State:  tm.State,
+		Tape:   append([]string{}, tm.Tape...),
+		Head:   tm.Head,
+		Step:   0,
+		Action: "Initial state",
+	})
+
+	for tm.State != tm.Definition.AcceptState &&
+		tm.State != tm.Definition.RejectState &&
+		steps < req.MaxSteps {
+
+		beforeState := tm.State
+		//beforeHead := tm.Head
+		tm.Step()
+		steps++
+
+		action := "Moved to " + tm.State
+		if tm.State == beforeState {
+			action = "Stayed in " + tm.State
+		}
+
+		history = append(history, Step{
+			State:  tm.State,
+			Tape:   append([]string{}, tm.Tape...),
+			Head:   tm.Head,
+			Step:   steps,
+			Action: action,
+		})
+	}
+
+	result := "Rejected"
+	if tm.State == tm.Definition.AcceptState {
+		result = "Accepted"
+	}
+
+	response := SimulateResponse{
+		Result:    result,
+		FinalTape: tm.Tape,
+		Steps:     steps,
+		History:   history,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func getExamples(c *gin.Context) {
+	examples := []gin.H{
+		{"name": "simple", "title": "Simple Example", "description": "Basic TM that accepts strings with 0"},
+		{"name": "palindrome", "title": "Palindrome Check", "description": "TM that checks for palindromes"},
+		{"name": "binary", "title": "Binary Counter", "description": "TM that increments binary numbers"},
+	}
+	c.JSON(http.StatusOK, examples)
+}
+
+func getExample(c *gin.Context) {
+	name := c.Param("name")
+
+	// Load example from JSON file
+	examplePath := "../input/" + name + "_tm.json"
+
+	// Read and parse the JSON file
+	fileData, err := ioutil.ReadFile(examplePath)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Example not found: " + err.Error()})
+		return
+	}
+
+	var example turing.TuringMachineDefinition
+	if err := json.Unmarshal(fileData, &example); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid JSON format: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, example)
+}

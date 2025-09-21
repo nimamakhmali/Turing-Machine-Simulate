@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turing Machine Simulator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Turing Machine Simulator</h1>
+            <p>Interactive simulation of Turing machines with step-by-step visualization</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Configuration Panel -->
+            <div class="config-panel">
+                <h2>Configuration</h2>
+                
+                <div class="form-group">
+                    <label for="example-select">Choose Example:</label>
+                    <select id="example_select">
+                        <option value="">Select an example...</option>
+                        <option value="simple">Simple Example</option>
+                        <option value="palindrome">Palindrome Check</option>
+                        <option value="binary">Binary Counter</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tape_input">Initial Tape:</label>
+                    <input type="text" id="tape_input" placeholder="e.g., 0011" value="0011">
+                </div>
+
+                <div class="form-group">
+                    <label for="max_steps">Max Steps:</label>
+                    <input type="number" id="max_steps" value="1000" min="1" max="10000">
+                </div>
+
+                <button id="run_btn" class="btn-primary"> Run Simulation</button>
+                <button id="step_btn" class="btn-secondary"> Step Through</button>
+            </div>
+
+            <!-- Simulation Panel -->
+            <div class="simulation-panel">
+                <h2>Simulation</h2>
+                
+                <div class="result-display">
+                    <div class="result-item">
+                        <span class="label">Status:</span>
+                        <span id="status" class="status">Ready</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Steps:</span>
+                        <span id="steps">0</span>
+                    </div>
+                </div>
+
+                <!-- Tape Visualization -->
+                <div class="tape-container">
+                    <h3>Tape Visualization</h3>
+                    <div id="tape_display" class="tape-display"></div>
+                </div>
+
+                <!-- Step History -->
+                <div class="history-container">
+                    <h3>Execution History</h3>
+                    <div id="history_list" class="history-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON Editor -->
+        <div class="json-panel">
+            <h2>JSON Configuration</h2>
+            <textarea id="json_editor" placeholder="Enter Turing machine definition in JSON format..."></textarea>
+            <button id="load_json_btn" class="btn-secondary">Load JSON</button>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html> 
